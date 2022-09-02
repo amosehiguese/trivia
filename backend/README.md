@@ -214,7 +214,8 @@ You will need to provide detailed documentation of your API endpoints including 
 
 ```json
 {
-  "question": {
+  "question": [ 
+  {
     "id": 17,
     "question": "La Giaconda is better known as what?",
     "answer": "Mona Lisa",
