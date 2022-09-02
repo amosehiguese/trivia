@@ -101,13 +101,12 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['current_category'], 'All')
 
     def test_search_item_not_found(self):
-        res = self.client().post('/api/questions/search', json={'searchTerm': 'tleleksjfkdfkd'})
+        res = self.client().post('/api/questions/search', json={'searchTerm': 'clincduties'})
 
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(data['total_questions'], 0)
         self.assertEqual(len(data['questions']), 0)
 
 
@@ -153,7 +152,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(data['message'], 'Not Found')
 
     def test_quiz(self):
-        res = self.client().post('/api/quizzes', json={'quiz_category': {'id': '4'}})
+        res = self.client().post('/api/quizzes', json={'quiz_category': {'id': '6', 'type': 'Sport'}, 'previous_category':[12, 1]})
 
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 200)

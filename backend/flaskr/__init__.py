@@ -162,11 +162,11 @@ def create_app(test_config=None):
             # curr_quest = paginate_quest(request, selection)
             curr_quest = [sel.format() for sel in selection]
 
-            jsonify({
+            return jsonify({
                 'success': True,
                 'questions': curr_quest,
                 'total_questions': len(Question.query.all()),
-                'currrent_category': 'All'
+                'current_category': 'All'
             })
 
         else:
@@ -209,28 +209,27 @@ def create_app(test_config=None):
     """
     @app.route('/api/quizzes', methods=['POST'])
     def play_quiz():
-        try:
-            body = request.get_json()
-            previous_questions = body.get('previous_question', None)
 
-            quiz_category = body.get('quiz_category', None)
+        body = request.get_json()
+        previous_questions = body.get('previous_question', None)
 
-            questions = Question.query.filter(Question.catetory == quiz_category['id']).all()
+        quiz_category = body.get('quiz_category', None)
 
-            if previous_questions is None:
-                return jsonify({
-                    'success': True,
-                    'question': questions[0].format()
-                })
-            else:
-                filter_prev_question = [quest.format() for quest in questions if quest.id not in previous_questions]
-                return jsonify({
-                    'success': True,
-                    'question': random.choice(filter_prev_question)
-                })
-            
-        except:
-            abort(404)
+        questions = Question.query.filter(Question.category == quiz_category['id']).all()
+
+        if previous_questions is None:
+            return jsonify({
+                'success': True,
+                'question': questions[0].format()
+            })
+
+        filter_prev_question = [quest.format() for quest in questions if quest.id not in previous_questions]
+        
+        return jsonify({
+                'success': True,
+                'question': random.choice(filter_prev_question)
+            })
+
 
 
 
